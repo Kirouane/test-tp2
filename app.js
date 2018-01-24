@@ -8,7 +8,7 @@ var app = express();
 app.use(bodyParser.urlencoded({extended: true})); // for parsing application/x-www-form-urlencoded
 
 app
-    .route('/user/:id')
+    .route('/user/:id?')
 
     // Récupération d'un utilisateur
     .get(function (req, res) {
@@ -19,7 +19,12 @@ app
          * sous format json au client.(voir le controlleur .post)
          */
 
-        res.send('Not implemented');
+        var repository = new UserRepository(db);
+        var user = repository.findOneById(id);
+        res.header("Access-Control-Allow-Origin", "*");
+        res.send(user)
+
+        //res.send('Not implemented');
     })
 
     // Creation d'un utilisateur
@@ -40,11 +45,15 @@ app
     //mise à jour d'un utilisateur
     .put(function (req, res) {
 
-        /**
-         * Implémenter le controlleur
-         */
+        user.id = uuidv4();
+        user.firstname = req.body.firstname;
+        user.lastname = req.body.lastname;
+        user.birthday = req.body.birthday;
 
-        res.send('Not implemented');
+        var repository = new UserRepository(db);
+        repository.update(user);
+        res.header("Access-Control-Allow-Origin", "*");
+        res.send(user)
     })
 
     //suppression d'un utilisateur

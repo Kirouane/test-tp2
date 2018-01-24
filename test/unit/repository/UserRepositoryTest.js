@@ -45,3 +45,26 @@ describe("UserRepository", function() {
     });
 
 });
+
+describe("UserRepository FindOneById", function() {
+    it("should call db.write", function(){
+        var mockDb = jasmine.createSpyObj('db', ['get', 'find', 'value']);
+        mockDb.find.and.returnValue(mockDb);
+        mockDb.value.and.returnValue({
+            id : 123,
+            firstname: 'Jean',
+            lastname : 'Test',
+            birthday : '21-01-2018'
+        });
+
+        var repository = new UserRepository(mockDb);
+        repository.findOneById('123');
+		
+		expect(user.id).toEqual('123');
+		expect(user.firstname).toEqual('Jean');
+		expect(user.lastname).toEqual('Test');
+		expect(user.birthday).toEqual('21-01-2018');
+		
+        expect(mockDb.find).toHaveBeenCalledTimes(1);
+    });
+});
