@@ -44,16 +44,11 @@ app
 
     //mise à jour d'un utilisateur
     .put(function (req, res) {
+		/**
+         * Implémenter le controlleur
+         */
 
-        user.id = uuidv4();
-        user.firstname = req.body.firstname;
-        user.lastname = req.body.lastname;
-        user.birthday = req.body.birthday;
-
-        var repository = new UserRepository(db);
-        repository.update(user);
-        res.header("Access-Control-Allow-Origin", "*");
-        res.send(user)
+        res.send('Not implemented');
     })
 
     //suppression d'un utilisateur

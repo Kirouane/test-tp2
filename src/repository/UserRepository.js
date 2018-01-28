@@ -53,7 +53,7 @@ UserRepository.prototype.findOneById = function (id) {
  * @param {User} user
  */
 UserRepository.prototype.update = function (user) {
-
+	
 };
 
 /**
