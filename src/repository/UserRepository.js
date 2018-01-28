@@ -39,7 +39,13 @@ UserRepository.prototype.create = function (user) {
  * @return User
  */
 UserRepository.prototype.findOneById = function (id) {
+    if(!id)
+        throw 'Parameter id is require';
 
+    var finded = this.db.get('users')
+            .find({ id: id })
+
+    return finded.value();
 };
 
 /**
