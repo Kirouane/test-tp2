@@ -64,3 +64,12 @@ it("should return existing user", function() {
       expect(user.lastname).toEqual('Doe');
       expect(user.birthday).toEqual('2000-01-01');
   });
+
+it("should throw exception id undefined", function(){
+        var repository = new UserRepository({});
+        var f = function(){
+            repository.findOneById();
+        };
+
+        expect(f).toThrow('User id is undefined')
+    });
