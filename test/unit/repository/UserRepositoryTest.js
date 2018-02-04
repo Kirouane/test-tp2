@@ -45,3 +45,31 @@ describe("UserRepository", function() {
     });
 
 });
+
+it("should return existing user", function() {
+      var mockDb = jasmine.createSpyObj('db', ['get', 'find', 'value']);
+      mockDb.get.and.returnValue(mockDb);
+      mockDb.find.and.returnValue(mockDb);
+      mockDb.value.and.returnValue({
+          id: 'd5b99c94-6dc0-4876-9444-631f85d5faf6',
+          firstname: 'John',
+          lastname : 'Doe',
+          birthday : '2000-01-01'
+      });
+
+      var repository = new UserRepository(mockDb);
+      var user = repository.findOneById('d5b99c94-6dc0-4876-9444-631f85d5faf6');
+      expect(user.id).toEqual('d5b99c94-6dc0-4876-9444-631f85d5faf6');
+      expect(user.firstname).toEqual('John');
+      expect(user.lastname).toEqual('Doe');
+      expect(user.birthday).toEqual('2000-01-01');
+  });
+
+it("should throw exception id undefined", function(){
+        var repository = new UserRepository({});
+        var f = function(){
+            repository.findOneById();
+        };
+
+        expect(f).toThrow('User id is undefined')
+    });
