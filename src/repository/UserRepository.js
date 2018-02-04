@@ -46,7 +46,7 @@ UserRepository.prototype.findOneById = function (id) {
         .get('users')
         .find({id: id})
         .value()){
-        throw "User id doesn't exist";
+            throw "User id doesn't exist";
     }
     return this.db
         .get('users')
