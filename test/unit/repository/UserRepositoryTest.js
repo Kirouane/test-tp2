@@ -73,3 +73,15 @@ it("should throw exception id undefined", function(){
 
         expect(f).toThrow('User id is undefined')
     });
+
+it("should throw exception user id doesn't exist", function(){
+        var mockDb = jasmine.createSpyObj('db', ['get', 'find', 'value']);
+        mockDb.get.and.returnValue(mockDb);
+        mockDb.find.and.returnValue(mockDb);
+        mockDb.value.and.returnValue();
+        var repository = new UserRepository(mockDb);
+        var f = function(){
+            repository.findOneById('test');
+        };
+        expect(f).toThrow("User id doesn't exist")
+    });
