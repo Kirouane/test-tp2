@@ -21,6 +21,7 @@
     "jasmine-core": "^2.8.0",
     "lowdb": "^1.0.0",
     "minimatch": "^3.0.4",
+    "newman": "^3.9.3",
     "once": "^1.4.0",
     "path-is-absolute": "^1.0.1",
     "stryker-cli": "^0.1.3",
