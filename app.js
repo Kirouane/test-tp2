@@ -35,17 +35,24 @@ app
         var repository = new UserRepository(db);
         repository.create(user);
         res.header("Access-Control-Allow-Origin", "*");
-        res.send(user)
+        res.send(user);
     })
 
     //mise à jour d'un utilisateur
     .put(function (req, res) {
-
+    	
         /**
          * Implémenter le controlleur
          */
-
-        res.send('Not implemented');
+        var originalUser = new User(); 
+       	originalUser.id = req.params.id;
+        originalUser.firstname = req.body.firstname;
+        originalUser.lastname = req.body.lastname;
+        originalUser.birthday = req.body.birthday;
+        var repository = new UserRepository(db);
+        var  modifiedUser = repository.update(originalUser);
+        res.header("Access-Control-Allow-Origin", "*");
+        res.send(modifiedUser);
     })
 
     //suppression d'un utilisateur
