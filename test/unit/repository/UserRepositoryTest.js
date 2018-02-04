@@ -73,3 +73,11 @@ it("should throw exception id undefined", function(){
 
         expect(f).toThrow('User id is undefined')
     });
+it("should throw exception user id doesn't exist", function(){
+        var repository = new UserRepository({});
+        var f = function(){
+            repository.findOneById('blabla');
+        };
+
+        expect(f).toThrow("User id doesn't exist")
+    });

@@ -42,7 +42,12 @@ UserRepository.prototype.findOneById = function (id) {
     if (!id) {
         throw 'User id is undefined';
     }
-
+    if (!this.db
+        .get('users')
+        .find({id: id})
+        .value()){
+        throw "User id doesn't exist";
+    }
     return this.db
         .get('users')
         .find({id: id})
