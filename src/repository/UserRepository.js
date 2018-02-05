@@ -39,7 +39,10 @@ UserRepository.prototype.create = function (user) {
  * @return User
  */
 UserRepository.prototype.findOneById = function (id) {
+    if(!id)
+        throw 'User ID is undefined';
 
+    return this.db.get('users').find({id: id}).value();
 };
 
 /**
