@@ -39,7 +39,9 @@ UserRepository.prototype.create = function (user) {
  * @return User
  */
 UserRepository.prototype.findOneById = function (id) {
-
+  return this.db.get('users')
+          .find({ id: id })
+          .value()
 };
 
 /**
@@ -47,7 +49,12 @@ UserRepository.prototype.findOneById = function (id) {
  * @param {User} user
  */
 UserRepository.prototype.update = function (user) {
-
+  usr = this.db.get('users')
+          .find({ id: id })
+  usr.firstname = user.firstname;
+  usr.lastname = user.lastname;
+  usr.birthday = user.birthday;
+  usr.write();
 };
 
 /**
@@ -55,10 +62,10 @@ UserRepository.prototype.update = function (user) {
  * @param {number} id
  */
 UserRepository.prototype.delete = function (id) {
-
+  this.db.get('users')
+          .remove({ id: id })
+          .write();
 };
 
 
 module.exports = UserRepository;
-
-
