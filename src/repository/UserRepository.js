@@ -76,7 +76,7 @@ UserRepository.prototype.update = function (user) {
 
     var find = this.db
         .get('users')
-        .find({'id': id})
+        .find({'id': userData.id})
 
     if(!find){
         throw "User does not exist"
