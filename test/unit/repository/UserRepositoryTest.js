@@ -71,12 +71,19 @@ describe("UserRepository - findOneById", function(){
         var mockDb = jasmine.createSpyObj('db', ['get', 'find', 'value']);
         mockDb.get.and.returnValue(mockDb);
         mockDb.find.and.returnValue(mockDb);
-        mockDb.value.and.returnValue(mockDb);
+        user = {
+            id:1,
+            firstname: "John",
+            lastname: "Doe",
+            birthday: '2000-01-01'
+        }
+        mockDb.value.and.returnValue(user);
         var repository = new UserRepository(mockDb);
         var f = repository.findOneById(1);
-        expect(f).toBeDefined();
+        expect(f).toEqual(user);
         expect(mockDb.find).toHaveBeenCalledWith({'id':1})
         expect(mockDb.find).toHaveBeenCalledTimes(1)
         expect(mockDb.value).toHaveBeenCalledTimes(1)
     })
 })
+
