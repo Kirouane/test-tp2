@@ -45,3 +45,38 @@ describe("UserRepository", function() {
     });
 
 });
+
+describe("UserRepository - findOneById", function(){
+    it("should throw exception missing id", function(){
+        var repository = new UserRepository({});
+        var f = function(){
+            repository.findOneById();
+        }
+        expect(f).toThrow("User id is undefined");
+    })
+
+    it("should throw exception user does not exist", function(){
+        var mockDb = jasmine.createSpyObj('db', ['get', 'find', 'value']);
+        mockDb.get.and.returnValue(mockDb);
+        var repository = new UserRepository(mockDb);
+        var f = function(){
+            repository.findOneById(100);
+        }
+        expect(f).toThrow("User does not exist");
+        expect(mockDb.find).toHaveBeenCalledWith({'id':100})
+        expect(mockDb.find).toHaveBeenCalledTimes(1)
+    })
+
+    it("should return the user object", function(){
+        var mockDb = jasmine.createSpyObj('db', ['get', 'find', 'value']);
+        mockDb.get.and.returnValue(mockDb);
+        mockDb.find.and.returnValue(mockDb);
+        mockDb.value.and.returnValue(mockDb);
+        var repository = new UserRepository(mockDb);
+        var f = repository.findOneById(1);
+        expect(f).toBeDefined();
+        expect(mockDb.find).toHaveBeenCalledWith({'id':1})
+        expect(mockDb.find).toHaveBeenCalledTimes(1)
+        expect(mockDb.value).toHaveBeenCalledTimes(1)
+    })
+})
