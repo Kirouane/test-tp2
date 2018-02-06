@@ -1,0 +1,128 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Test User API",
+		"_postman_id": "b548f7a6-79fe-06db-a6fd-d517aa7a98f3",
+		"description": "Scripts pour les tests sur l'api User",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET id is not defined",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"should return id is undefined\"] = responseBody.has(\"User id is undefined\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:3000/user/",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "GET : Test de l'erreur (id is undefined)"
+			},
+			"response": []
+		},
+		{
+			"name": "GET user does not exist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Body matches string\"] = responseBody.has(\"User does not exist\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:3000/user/dfg",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "firstname",
+							"value": "",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"description": "Test de l'erreur (User does not exist)"
+			},
+			"response": []
+		},
+		{
+			"name": "POST create user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"should create a user\", function(){",
+							"    var jsonData = pm.response.json()",
+							"    pm.expect(pm.response.to.have.status(200))",
+							"    pm.expect(jsonData.firstname).to.eql(\"John\")",
+							"    pm.expect(jsonData.lastname).to.eql(\"Doe\")",
+							"    pm.expect(jsonData.birthday).to.eql(\"2000-01-01\")",
+							"    pm.environment.set(\"id created\",jsonData.id)",
+							"})"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:3000/user",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "firstname",
+							"value": "John",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "lastname",
+							"value": "Doe",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "birthday",
+							"value": "2000-01-01",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"description": "Test de la creation d'un user"
+			},
+			"response": []
+		}
+	]
+}
