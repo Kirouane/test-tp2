@@ -43,5 +43,63 @@ describe("UserRepository", function() {
 
         expect(f).toThrow('User object is missing information')
     });
+});
+
+// Get user by ID
+describe("UserRepository", function() {
+
+    it("should return a user object", function(){
+
+        var mockDb = jasmine.createSpyObj('db', ['get', 'push', 'write', 'find', 'value']);
+        mockDb.get.and.returnValue(mockDb);
+        mockDb.push.and.returnValue(mockDb);
+        mockDb.find.and.returnValue(mockDb);
+        mockDb.value.and.returnValue({
+            id : 1,
+            firstname: 'John',
+            lastname : 'Doe',
+            birthday : '2000-01-01'
+        });
+
+        var repository = new UserRepository(mockDb);
+        var user = repository.findOneById(1);
+
+        expect(user).toEqual({
+            id : 1,
+            firstname: 'John',
+            lastname : 'Doe',
+            birthday : '2000-01-01'
+        })
+
+        expect(mockDb.find).toHaveBeenCalledWith({id: 1});
+    });
+
+    it("should throw exception 'Requested user doesn't exist'", function(){
+        var mockDb = jasmine.createSpyObj('db', ['get', 'push', 'write', 'find', 'value']);
+        mockDb.get.and.returnValue(mockDb);
+        mockDb.push.and.returnValue(mockDb);
+        mockDb.find.and.returnValue(mockDb);
+        mockDb.value.and.returnValue(null);
+        var repository = new UserRepository(mockDb);
+        var f = function(){
+            repository.findOneById(1);
+        };
+
+        expect(f).toThrow('Requested user doesn\'t exist')
+    });
+
+    it("should throw exception 'Missing user ID'", function(){
+        var mockDb = jasmine.createSpyObj('db', ['get', 'push', 'write', 'find', 'value']);
+        mockDb.get.and.returnValue(mockDb);
+        mockDb.push.and.returnValue(mockDb);
+        mockDb.find.and.returnValue(mockDb);
+        mockDb.value.and.returnValue(mockDb);
+        var repository = new UserRepository(mockDb);
+        var f = function(){
+            repository.findOneById();
+        };
+
+        expect(f).toThrow('Missing user ID')
+    });
 
 });
