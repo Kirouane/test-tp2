@@ -46,12 +46,12 @@ UserRepository.prototype.findOneById = function (id) {
     var user = this.db
                     .get('users')
                     .find({'id': id})
-
+                    .value()
     if (!user) {
         throw "User does not exist";
     }
 
-    return user.value();
+    return user;
 };
 
 /**
