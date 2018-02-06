@@ -58,6 +58,7 @@ describe("UserRepository - findOneById", function(){
     it("should throw exception user does not exist", function(){
         var mockDb = jasmine.createSpyObj('db', ['get', 'find', 'value']);
         mockDb.get.and.returnValue(mockDb);
+        mockDb.find.and.returnValue(mockDb);
         var repository = new UserRepository(mockDb);
         var f = function(){
             repository.findOneById(100);
