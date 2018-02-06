@@ -171,3 +171,33 @@ it("should call db.assign and db.write", function() {
         };
         expect(f).toThrow("User id doesn't exist")
     });
+/********Tests sur DELETE ********/
+it("should call db.remove and db.write", function() {
+      var mockDb = jasmine.createSpyObj('db', ['get', 'find','value','remove', 'write']);
+      mockDb.get.and.returnValue(mockDb);
+      mockDb.find.and.returnValue(mockDb);
+      mockDb.value.and.returnValue({
+          id: 'd5b99c94-6dc0-4876-9444-631f85d5faf6',
+          firstname: 'JohnTEST',
+          lastname : 'DoeTEST',
+          birthday : '2000-01-01'
+      });
+      mockDb.remove.and.returnValue(mockDb);
+      mockDb.write.and.returnValue({
+          id: 'd5b99c94-6dc0-4876-9444-631f85d5faf6',
+          firstname: 'JohnTEST',
+          lastname : 'DoeTEST',
+          birthday : '2000-01-01'
+      });
+      var repository = new UserRepository(mockDb);
+      var user = repository.delete({
+            id : 'd5b99c94-6dc0-4876-9444-631f85d5faf6',
+        });
+        expect(mockDb.remove).toHaveBeenCalledWith({
+          id: 'd5b99c94-6dc0-4876-9444-631f85d5faf6',
+          firstname: 'JohnTEST',
+          lastname : 'DoeTEST',
+          birthday : '2000-01-01'
+        });
+        expect(mockDb.write).toHaveBeenCalledTimes(1);
+    });

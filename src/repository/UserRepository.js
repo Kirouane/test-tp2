@@ -57,6 +57,7 @@ UserRepository.prototype.findOneById = function (id) {
 /**
  *
  * @param {User} user
+ * @return user
  */
 UserRepository.prototype.update = function (user) {
     if (!user) {
@@ -109,7 +110,11 @@ UserRepository.prototype.update = function (user) {
  * @param {number} id
  */
 UserRepository.prototype.delete = function (id) {
-
+    var user = this.findOneById(id);
+    return this.db
+        .get('users')
+        .remove(user)
+        .write()
 };
 
 
