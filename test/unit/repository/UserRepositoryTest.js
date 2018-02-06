@@ -87,3 +87,24 @@ describe("UserRepository - findOneById", function(){
     })
 })
 
+describe("UserRepository - delete", function(){
+    it("should throw exception missing id", function(){
+        var repository = new UserRepository({});
+        var f = function(){
+            repository.delete();
+        }
+        expect(f).toThrow("User id is undefined");
+    })
+
+    it("should call db.write", function(){
+        var mockDb = jasmine.createSpyObj('db', ['get', 'remove', 'write']);
+        mockDb.get.and.returnValue(mockDb);
+        mockDb.remove.and.returnValue(mockDb);
+        var repository = new UserRepository(mockDb);
+        repository.delete(1)
+        expect(mockDb.remove).toHaveBeenCalledWith({'id':1})
+        expect(mockDb.remove).toHaveBeenCalledTimes(1)
+        expect(mockDb.write).toHaveBeenCalledTimes(1)
+    })
+})
+
