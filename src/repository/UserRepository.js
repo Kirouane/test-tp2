@@ -40,6 +40,12 @@ UserRepository.prototype.create = function (user) {
  */
 UserRepository.prototype.findOneById = function (id) {
 
+    if(!id) throw "Missing user ID";
+
+    console.log("SEARCHING FOR USER WITH ID : " + id);
+    var user = this.db.get('users').find({id: id}).value();
+    if(user != null) return user;
+    throw "Requested user doesn't exist";
 };
 
 /**
