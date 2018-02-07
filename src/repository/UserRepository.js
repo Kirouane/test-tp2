@@ -39,9 +39,15 @@ UserRepository.prototype.create = function (user) {
  * @return User
  */
 UserRepository.prototype.findOneById = function (id) {
-  return this.db.get('users')
+	
+  if (!id) {
+      throw 'User id is undefined';
+  }
+  return this.db
+          .get('users')
           .find({ id: id })
-          .value()
+		  .value();
+	
 };
 
 /**
@@ -49,12 +55,17 @@ UserRepository.prototype.findOneById = function (id) {
  * @param {User} user
  */
 UserRepository.prototype.update = function (user) {
-  usr = this.db.get('users')
-          .find({ id: id })
-  usr.firstname = user.firstname;
-  usr.lastname = user.lastname;
-  usr.birthday = user.birthday;
-  usr.write();
+
+	if (!user) {
+        throw 'User object is undefined';
+    }
+
+    this.db
+        .get('users')
+        .find({ id: user.id })
+        .assign(user)
+        .write()
+
 };
 
 /**
@@ -62,9 +73,15 @@ UserRepository.prototype.update = function (user) {
  * @param {number} id
  */
 UserRepository.prototype.delete = function (id) {
+	
+	if (!id) {
+      throw 'User id is undefined';
+  }
+
   this.db.get('users')
-          .remove({ id: id })
-          .write();
+        .remove({id: id })
+        .write()
+
 };
 
 
