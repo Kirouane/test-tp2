@@ -1,10 +1,9 @@
 {
-	"variables": [],
 	"info": {
 		"name": "Test User API",
-		"_postman_id": "b548f7a6-79fe-06db-a6fd-d517aa7a98f3",
+		"_postman_id": "b320649b-9e26-1c67-65f3-3ec7759bdcfe",
 		"description": "Scripts pour les tests sur l'api User",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -13,18 +12,34 @@
 				{
 					"listen": "test",
 					"script": {
+						"id": "ff7e80e9-afe0-4a7b-8ce7-9deaed19fe0c",
 						"type": "text/javascript",
 						"exec": [
-							"tests[\"should return id is undefined\"] = responseBody.has(\"User id is undefined\");"
+							"tests[\"should return id is undefined\"] = responseBody.has(\"User id is undefined\");",
+							"postman.setNextRequest(\"GET user does not exist\");"
 						]
 					}
 				}
 			],
 			"request": {
-				"url": "http://localhost:3000/user/",
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						""
+					]
+				},
 				"description": "GET : Test de l'erreur (id is undefined)"
 			},
 			"response": []
@@ -35,21 +50,21 @@
 				{
 					"listen": "test",
 					"script": {
+						"id": "d2875c74-7108-4ae9-ba2c-72a2cbf96a4f",
 						"type": "text/javascript",
 						"exec": [
-							"tests[\"Body matches string\"] = responseBody.has(\"User does not exist\");"
+							"tests[\"Body matches string\"] = responseBody.has(\"User does not exist\");",
+							"postman.setNextRequest(\"POST create user\");"
 						]
 					}
 				}
 			],
 			"request": {
-				"url": "http://localhost:3000/user/dfg",
 				"method": "GET",
 				"header": [
 					{
 						"key": "Content-Type",
-						"value": "application/x-www-form-urlencoded",
-						"description": ""
+						"value": "application/x-www-form-urlencoded"
 					}
 				],
 				"body": {
@@ -58,9 +73,20 @@
 						{
 							"key": "firstname",
 							"value": "",
-							"description": "",
 							"type": "text"
 						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/dfg",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"dfg"
 					]
 				},
 				"description": "Test de l'erreur (User does not exist)"
@@ -73,6 +99,7 @@
 				{
 					"listen": "test",
 					"script": {
+						"id": "75fdc84c-1cbf-4c1a-b573-8345c01fc328",
 						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"should create a user\", function(){",
@@ -81,20 +108,21 @@
 							"    pm.expect(jsonData.firstname).to.eql(\"John\")",
 							"    pm.expect(jsonData.lastname).to.eql(\"Doe\")",
 							"    pm.expect(jsonData.birthday).to.eql(\"2000-01-01\")",
-							"    pm.environment.set(\"id created\",jsonData.id)",
-							"})"
+							"    pm.environment.set(\"id\",jsonData.id);",
+							"    postman.setNextRequest(\"GET should work\")",
+							"})",
+							"",
+							""
 						]
 					}
 				}
 			],
 			"request": {
-				"url": "http://localhost:3000/user",
 				"method": "POST",
 				"header": [
 					{
 						"key": "Content-Type",
-						"value": "application/x-www-form-urlencoded",
-						"description": ""
+						"value": "application/x-www-form-urlencoded"
 					}
 				],
 				"body": {
@@ -103,24 +131,84 @@
 						{
 							"key": "firstname",
 							"value": "John",
-							"description": "",
 							"type": "text"
 						},
 						{
 							"key": "lastname",
 							"value": "Doe",
-							"description": "",
 							"type": "text"
 						},
 						{
 							"key": "birthday",
 							"value": "2000-01-01",
-							"description": "",
 							"type": "text"
 						}
 					]
 				},
+				"url": {
+					"raw": "http://localhost:3000/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user"
+					]
+				},
 				"description": "Test de la creation d'un user"
+			},
+			"response": []
+		},
+		{
+			"name": "GET should work",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "0a9c1364-7e57-45f2-91d3-593884eb0241",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "4d9dd9e0-d643-4a00-9e34-7a0029784349",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"should return a user\", function(){",
+							"    var jsonData = pm.response.json()",
+							"    pm.expect(pm.response.to.have.status(200))",
+							"    pm.expect(jsonData.id).to.eql( pm.environment.get(\"id\"))",
+							"    pm.expect(jsonData.firstname).to.eql(\"John\")",
+							"    pm.expect(jsonData.lastname).to.eql(\"Doe\")",
+							"    pm.expect(jsonData.birthday).to.eql(\"2000-01-01\")",
+							"    postman.setNextRequest(null);",
+							"})"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/user/{{id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"{{id}}"
+					]
+				},
+				"description": "Test du bon fonctionnement du get"
 			},
 			"response": []
 		}
