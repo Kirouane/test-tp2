@@ -99,7 +99,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "75fdc84c-1cbf-4c1a-b573-8345c01fc328",
+						"id": "b39c8482-329d-49b5-8f11-a661f55366bd",
 						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"should create a user\", function(){",
@@ -110,9 +110,7 @@
 							"    pm.expect(jsonData.birthday).to.eql(\"2000-01-01\")",
 							"    pm.environment.set(\"id\",jsonData.id);",
 							"    postman.setNextRequest(\"GET should work\")",
-							"})",
-							"",
-							""
+							"})"
 						]
 					}
 				}
@@ -176,7 +174,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "4d9dd9e0-d643-4a00-9e34-7a0029784349",
+						"id": "78a2bb34-c6bb-4ad6-9882-648a2810b201",
 						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"should return a user\", function(){",
@@ -186,7 +184,7 @@
 							"    pm.expect(jsonData.firstname).to.eql(\"John\")",
 							"    pm.expect(jsonData.lastname).to.eql(\"Doe\")",
 							"    pm.expect(jsonData.birthday).to.eql(\"2000-01-01\")",
-							"    postman.setNextRequest(null);",
+							"    postman.setNextRequest(\"PUT user is undefined\");",
 							"})"
 						]
 					}
@@ -209,6 +207,156 @@
 					]
 				},
 				"description": "Test du bon fonctionnement du get"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT user is undefined",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "dfb6185f-ff9c-4865-a080-b6c910efaab9",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Body matches string\"] = responseBody.has(\"User object is undefined\") || responseBody.has(\"User object is missing information\");",
+							"postman.setNextRequest(\"PUT should return missing information\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/user/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						""
+					]
+				},
+				"description": "Test de l'erreur user is undefined"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT should return missing information",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1af4cdde-1797-4493-82b2-fd65f7e84e93",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Body matches string\"] = responseBody.has(\"User object is missing information\");",
+							"postman.setNextRequest(\"PUT should work\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/user/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						""
+					]
+				},
+				"description": "test de l'erreur User object is missing information"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT should work",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "75bee350-7213-4270-a4e6-580204abda95",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"should work\", function(){",
+							"    var jsonData = pm.response.json()",
+							"    pm.expect(pm.response.to.have.status(200))",
+							"    pm.expect(jsonData.id).to.eql( pm.environment.get(\"id\"))",
+							"    pm.expect(jsonData.firstname).to.eql(\"David\")",
+							"    pm.expect(jsonData.lastname).to.eql(\"Gonzales\")",
+							"    pm.expect(jsonData.birthday).to.eql(\"2014-01-01\")",
+							"    postman.setNextRequest(\"null\");",
+							"})"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id",
+							"value": "{{id}}",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "firstname",
+							"value": "David",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "lastname",
+							"value": "Gonzales",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "birthday",
+							"value": "2014-01-01",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						""
+					]
+				},
+				"description": "bon fonctionnement du PUT"
 			},
 			"response": []
 		}
