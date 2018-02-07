@@ -1,0 +1,471 @@
+{
+	"info": {
+		"name": "Test User API",
+		"_postman_id": "b320649b-9e26-1c67-65f3-3ec7759bdcfe",
+		"description": "Scripts pour les tests sur l'api User",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET id is not defined",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ff7e80e9-afe0-4a7b-8ce7-9deaed19fe0c",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"should return id is undefined\"] = responseBody.has(\"User id is undefined\");",
+							"postman.setNextRequest(\"GET user does not exist\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						""
+					]
+				},
+				"description": "GET : Test de l'erreur (id is undefined)"
+			},
+			"response": []
+		},
+		{
+			"name": "GET user does not exist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d2875c74-7108-4ae9-ba2c-72a2cbf96a4f",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Body matches string\"] = responseBody.has(\"User does not exist\");",
+							"postman.setNextRequest(\"POST create user\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "firstname",
+							"value": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/dfg",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"dfg"
+					]
+				},
+				"description": "Test de l'erreur (User does not exist)"
+			},
+			"response": []
+		},
+		{
+			"name": "POST create user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b39c8482-329d-49b5-8f11-a661f55366bd",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"should create a user\", function(){",
+							"    var jsonData = pm.response.json()",
+							"    pm.expect(pm.response.to.have.status(200))",
+							"    pm.expect(jsonData.firstname).to.eql(\"John\")",
+							"    pm.expect(jsonData.lastname).to.eql(\"Doe\")",
+							"    pm.expect(jsonData.birthday).to.eql(\"2000-01-01\")",
+							"    pm.environment.set(\"id\",jsonData.id);",
+							"    postman.setNextRequest(\"GET should work\")",
+							"})"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "firstname",
+							"value": "John",
+							"type": "text"
+						},
+						{
+							"key": "lastname",
+							"value": "Doe",
+							"type": "text"
+						},
+						{
+							"key": "birthday",
+							"value": "2000-01-01",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user"
+					]
+				},
+				"description": "Test de la creation d'un user"
+			},
+			"response": []
+		},
+		{
+			"name": "GET should work",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "0a9c1364-7e57-45f2-91d3-593884eb0241",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "78a2bb34-c6bb-4ad6-9882-648a2810b201",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"should return a user\", function(){",
+							"    var jsonData = pm.response.json()",
+							"    pm.expect(pm.response.to.have.status(200))",
+							"    pm.expect(jsonData.id).to.eql( pm.environment.get(\"id\"))",
+							"    pm.expect(jsonData.firstname).to.eql(\"John\")",
+							"    pm.expect(jsonData.lastname).to.eql(\"Doe\")",
+							"    pm.expect(jsonData.birthday).to.eql(\"2000-01-01\")",
+							"    postman.setNextRequest(\"PUT user is undefined\");",
+							"})"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/user/{{id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"{{id}}"
+					]
+				},
+				"description": "Test du bon fonctionnement du get"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT user is undefined",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "dfb6185f-ff9c-4865-a080-b6c910efaab9",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Body matches string\"] = responseBody.has(\"User object is undefined\") || responseBody.has(\"User object is missing information\");",
+							"postman.setNextRequest(\"PUT should return missing information\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/user/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						""
+					]
+				},
+				"description": "Test de l'erreur user is undefined"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT should return missing information",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1af4cdde-1797-4493-82b2-fd65f7e84e93",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Body matches string\"] = responseBody.has(\"User object is missing information\");",
+							"postman.setNextRequest(\"PUT should work\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/user/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						""
+					]
+				},
+				"description": "test de l'erreur User object is missing information"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT should work",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a1c18097-4f44-47e2-8c7d-cd725c104cd8",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"should work\", function(){",
+							"    var jsonData = pm.response.json()",
+							"    pm.expect(pm.response.to.have.status(200))",
+							"    pm.expect(jsonData.id).to.eql( pm.environment.get(\"id\"))",
+							"    pm.expect(jsonData.firstname).to.eql(\"David\")",
+							"    pm.expect(jsonData.lastname).to.eql(\"Gonzales\")",
+							"    pm.expect(jsonData.birthday).to.eql(\"2014-01-01\")",
+							"    postman.setNextRequest(\"DELETE id is undefined\");",
+							"})"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id",
+							"value": "{{id}}",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "firstname",
+							"value": "David",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "lastname",
+							"value": "Gonzales",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "birthday",
+							"value": "2014-01-01",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						""
+					]
+				},
+				"description": "bon fonctionnement du PUT"
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE id is undefined",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9cc824b3-c035-409f-8e28-79ef1715a64c",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"should return id is undefined\"] = responseBody.has(\"User id is undefined\");",
+							"postman.setNextRequest(\"DELETE should work\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/user/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						""
+					]
+				},
+				"description": "test de l'erreur id is undefined"
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE should work",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "972c43bf-6fd9-42b4-a74c-9d9f5473d04a",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"should work\", function(){",
+							"    responseBody.has(\"deleted\");",
+							"    postman.setNextRequest(\"GET after delete\");",
+							"})"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/user/{{id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"{{id}}"
+					]
+				},
+				"description": "test du bon fonctionnement"
+			},
+			"response": []
+		},
+		{
+			"name": "GET after delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cc2aea0e-2390-4c29-b6ab-8c8492b91b40",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Body matches string\"] = responseBody.has(\"User does not exist\");",
+							"postman.setNextRequest(null);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/user/{{id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"{{id}}"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
