@@ -46,7 +46,16 @@ app
          * Implémenter le controlleur
          */
 
-        res.send('Not implemented');
+        var repository = new UserRepository(db);
+        var user = new User();
+        user.id = req.params.id;
+        user.firstname = req.body.firstname;
+        user.lastname = req.body.lastname;
+        user.birthday = req.body.birthday;
+        repository.update(user)
+        res.send("updated");
+		
+		
     })
 
     //suppression d'un utilisateur
