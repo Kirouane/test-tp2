@@ -12,19 +12,16 @@ app
 
     // Récupération d'un utilisateur
     .get(function (req, res) {
-        var id = req.params.id;
-
+       
         /**
          * Implémenter ce controlleur afin qu'il rechereche en base de donnée l'utilisateur par son ID et le retourne
          * sous format json au client.(voir le controlleur .post)
          */
 
-		 
-		 var repository = new UserRepository(db);
-         var user = repository.findOneById(id);
-         res.header("Access-Control-Allow-Origin", "*");
-		 res.send(user)
-        
+		 var id = req.params.id;
+         var repository = new UserRepository(db);
+         user = repository.findOneById(id);
+         res.send(user)
     })
 
     // Creation d'un utilisateur
@@ -49,7 +46,16 @@ app
          * Implémenter le controlleur
          */
 
-        res.send('Not implemented');
+        var repository = new UserRepository(db);
+        var user = new User();
+        user.id = req.params.id;
+        user.firstname = req.body.firstname;
+        user.lastname = req.body.lastname;
+        user.birthday = req.body.birthday;
+        repository.update(user)
+        res.send("updated");
+		
+		
     })
 
     //suppression d'un utilisateur
