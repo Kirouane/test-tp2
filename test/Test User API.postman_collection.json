@@ -291,7 +291,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "75bee350-7213-4270-a4e6-580204abda95",
+						"id": "a1c18097-4f44-47e2-8c7d-cd725c104cd8",
 						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"should work\", function(){",
@@ -301,7 +301,7 @@
 							"    pm.expect(jsonData.firstname).to.eql(\"David\")",
 							"    pm.expect(jsonData.lastname).to.eql(\"Gonzales\")",
 							"    pm.expect(jsonData.birthday).to.eql(\"2014-01-01\")",
-							"    postman.setNextRequest(\"null\");",
+							"    postman.setNextRequest(\"DELETE id is undefined\");",
 							"})"
 						]
 					}
@@ -357,6 +357,113 @@
 					]
 				},
 				"description": "bon fonctionnement du PUT"
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE id is undefined",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9cc824b3-c035-409f-8e28-79ef1715a64c",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"should return id is undefined\"] = responseBody.has(\"User id is undefined\");",
+							"postman.setNextRequest(\"DELETE should work\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/user/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						""
+					]
+				},
+				"description": "test de l'erreur id is undefined"
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE should work",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "972c43bf-6fd9-42b4-a74c-9d9f5473d04a",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"should work\", function(){",
+							"    responseBody.has(\"deleted\");",
+							"    postman.setNextRequest(\"GET after delete\");",
+							"})"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/user/{{id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"{{id}}"
+					]
+				},
+				"description": "test du bon fonctionnement"
+			},
+			"response": []
+		},
+		{
+			"name": "GET after delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cc2aea0e-2390-4c29-b6ab-8c8492b91b40",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Body matches string\"] = responseBody.has(\"User does not exist\");",
+							"postman.setNextRequest(null);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/user/{{id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"{{id}}"
+					]
+				},
+				"description": ""
 			},
 			"response": []
 		}

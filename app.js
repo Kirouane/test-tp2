@@ -36,7 +36,6 @@ app
 
     //mise à jour d'un utilisateur
     .put(function (req, res) {
-
         var repository = new UserRepository(db);
         repository.update(req.body)
         var user = repository.findOneById(req.body.id)
@@ -46,11 +45,11 @@ app
 
     //suppression d'un utilisateur
     .delete(function (req, res) {
-        /**
-         * Implémenter le controlleur
-         */
-
-        res.send('Not implemented');
+        var id = req.params.id;
+        var repository = new UserRepository(db);
+        user = repository.delete(id);
+        res.header("Access-Control-Allow-Origin", "*");
+        res.send("deleted");
     });
 
 
