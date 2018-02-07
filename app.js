@@ -18,7 +18,8 @@ app
          * Implémenter ce controlleur afin qu'il rechereche en base de donnée l'utilisateur par son ID et le retourne
          * sous format json au client.(voir le controlleur .post)
          */
-
+        var repository = new UserRepository(db);
+        repository.create(1)
         res.send('Not implemented');
     })
 

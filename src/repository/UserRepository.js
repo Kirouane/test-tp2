@@ -30,7 +30,7 @@ UserRepository.prototype.create = function (user) {
     this.db
         .get('users')
         .push(userData)
-        .write()
+        .write();
 };
 
 /**
@@ -39,7 +39,18 @@ UserRepository.prototype.create = function (user) {
  * @return User
  */
 UserRepository.prototype.findOneById = function (id) {
+    if(id === undefined){
+        throw 'id parameter is undefined';
+    }
 
+    if(!(typeof id === "number") || Math.floor(id) !== id || id < 0){
+        throw 'Invalid id parameter';
+    }
+
+    return this.db
+        .get('users')
+        .find({'id' : id})
+        .value();
 };
 
 /**
