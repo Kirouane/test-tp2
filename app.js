@@ -53,7 +53,7 @@ app
         user.lastname = req.body.lastname;
         user.birthday = req.body.birthday;
         repository.update(user)
-        res.send("updated");
+        res.send("User has been updated");
 		
 		
     })
@@ -64,7 +64,11 @@ app
          * Implémenter le controlleur
          */
 
-        res.send('Not implemented');
+		var repository = new UserRepository(db);
+        var id = req.params.id;
+        repository.delete(id)
+		res.send("User has been deleted");
+        
     });
 
 
